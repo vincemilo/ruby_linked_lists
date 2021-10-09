@@ -90,30 +90,42 @@ class LinkedList
   end
 
   def insert_at(value, index)
-    new_node = Node.new(value)
-    temp = @head
-    count = 0
-    until temp.nil?
-      return prepend(value) if index.zero?
+    return puts 'Error: index outside of list.' if index > size - 1
 
-      if count == index - 1
-        new_node.next_node = temp.next_node
-        temp.next_node = new_node
+    if index.zero?
+      prepend(value) 
+    else
+      new_node = Node.new(value)
+      temp = @head
+      count = 0
+      until temp.nil?
+        if count == index - 1
+          new_node.next_node = temp.next_node
+          temp.next_node = new_node
+        end
+        count += 1
+        temp = temp.next_node
       end
-      count += 1
-      temp = temp.next_node
     end
+    @tail = new_node if new_node.next_node.nil?
   end
 
   def remove_at(index)
-    temp = @head
-    count = 0
-    until temp.nil?
-      return @head = temp.next_node if index.zero?
+    return puts 'Error: index outside of list.' if index > size - 1
 
-      temp.next_node = temp.next_node.next_node if count == index - 1
-      count += 1
-      temp = temp.next_node
+    if index.zero?
+      @head = temp.next_node
+    elsif at(index) == @tail
+      @tail = at(index - 1)
+      @tail.next_node = nil
+    else
+      temp = @head
+      count = 0
+      until temp.nil?
+        temp.next_node = temp.next_node.next_node if count == index - 1
+        count += 1
+        temp = temp.next_node
+      end
     end
   end
 end
@@ -136,17 +148,21 @@ list.prepend(4)
 # p list.head
 # p list.tail
 # p list
-# p list.size
+p list.size
 # p list
-p list.at(5)
+# p list.at(5)
 # p list.head.next_node
 # p list.tail.next_node
-p list.tail
-p list.pop
-p list.contains?(1)
-p list.find(2)
-puts list.to_s
-list.insert_at('foo', 2)
+# p list.tail
+# p list.pop
+# p list.contains?(1)
+# p list.find(2)
+# puts list.to_s
+list.insert_at('foo', 3)
 puts list.to_s
 list.remove_at(1)
+puts list.to_s
+puts list.tail.value
+puts list.to_s
+list.remove_at(3)
 puts list.to_s
